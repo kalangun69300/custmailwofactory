@@ -18,7 +18,7 @@ public class CustomerMailApplication {
      * @param args the command line arguments
      */
     private Customer customer;
-    public void getCustomerTypeFromUser(String customerType) {
+    public void getCustomerTypeFromUser(String customerType) {        
         switch(customerType) {
             case "Regular":
                 customer = new RegularCustomer();
@@ -31,27 +31,37 @@ public class CustomerMailApplication {
                 break;
         }
     }
-    public String generateMail() {
-        return customer.createMail();
+    public static void main(String[] arg) {
+        Customer cust = getCustomerTypeFromUser();
+        String mail = null;
+        if (cust != null) {
+            mail = generateMail(cust);
+            System.out.println(mail);
+        } else {
+            System.out.print("ERROR");
+        }
     }
-    
-    public static void main(String[] args) {
-        CustomerMailApplication app = new CustomerMailApplication();
+    public static String generateMail(Customer cust) {
+        return cust.createMail();
+    }
+
+    public static Customer getCustomerTypeFromUser() {
+        Customer cust = null;
         Scanner inp = new Scanner(System.in);
         System.out.print("Please choose customer type 1. Regular, 2. Mountain, 3. Delinquent ");
         int type = inp.nextInt();
         switch(type) {
             case 1:
-                app.getCustomerTypeFromUser("Regular");
+                cust = CustomerFactory.createCustomer("Regular");
                 break;
             case 2:
-                app.getCustomerTypeFromUser("Mountain");
+                 cust = CustomerFactory.createCustomer("Mountain");
                 break;
             case 3:
-                app.getCustomerTypeFromUser("Delinquent");
+                cust = CustomerFactory.createCustomer("Delinquent");
                 break;
             
         }
-        System.out.println(app.generateMail());        
+       return cust;        
     }
 }
